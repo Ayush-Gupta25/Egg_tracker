@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Past Entries 🛠️</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            color: #ef6c00;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.1em;
+        }
+
+        input {
+            width: 80px;
+            padding: 8px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin: 0 5px;
+            background: #ef6c00;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #d84315;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #ef6c00;
+            color: white;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        a:hover {
+            background: #d84315;
+        }
+
+        .add-form {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f8e9;
+            border-radius: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🛠️ Manage Past Entries</h1>
+
+        <form method="POST">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Eggs</th>
+                    <th>Actions</th>
+                </tr>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.date }}</td>
+                    <td><input type="number" name="count_{{ entry.date }}" value="{{ entry.count }}" min="0" required></td>
+                    <td>
+                        <button type="submit" name="update" value="{{ entry.date }}">💾 Update</button>
+                        <button type="submit" name="delete" value="{{ entry.date }}">🗑️ Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+
+        <div class="add-form">
+            <h2>Add New Entry</h2>
+            <form method="POST">
+                <label for="new_date">📅 Date:</label><br>
+                <input type="date" id="new_date" name="new_date" required><br><br>
+
+                <label for="new_count">🥚 Eggs Count:</label><br>
+                <input type="number" id="new_count" name="new_count" min="0" required><br><br>
+
+                <button type="submit" name="add" value="1">➕ Add Entry</button>
+            </form>
+        </div>
+
+        <a href="{{ url_for('index') }}">🏠 Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egg Tracker 🥚</title>
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js');
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+        .total-eggs {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        .form-card {
+            background: #fefefe;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            animation: fadeIn 1s ease;
+        }
+        label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: block;
+        }
+        input {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.2em;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            transition: border 0.3s ease;
+        }
+        input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.3em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .report-link {
+            display: inline-block;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 10px;
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .report-link:hover {
+            background: #45a049;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🥚 Egg Tracker</h1>
+
+        <div class="total-eggs">
+            🧮 Total Eggs This Month: <strong>{{ total_eggs }}</strong>
+        </div>
+
+        <div class="form-card">
+            <h2>Log Eggs Eaten Today</h2>
+            <form method="POST" class="egg-form">
+                <label for="count">📅 Date: <strong>{{ today }}</strong></label><br>
+                <input type="number" id="count" name="count" value="{{ eggs_today }}" min="0" required><br><br>
+                <button type="submit">💾 Save Entry</button>
+            </form>
+        </div>
+
+        <div class="links">
+            <a href="{{ url_for('report') }}" class="report-link">📊 View Monthly Report</a><br>
+            <a href="{{ url_for('manage') }}" class="report-link">🛠️ Manage Past Entries</a>
+        </div>
+    </div>
+    
+</body>
+<link rel="manifest" href="/static/manifest.json">
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/service-worker.js')
+            .then(() => console.log("Service Worker Registered"))
+            .catch(err => console.log("SW registration failed: ", err));
+    }
+</script>
+
+</html>
