@@ -2,14 +2,11 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Egg Tracker 🥚</title>
-    <link rel="manifest" href="/manifest.json">
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js');
-        }
-    </script>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#4CAF50">
 
     <style>
         body {
@@ -25,17 +22,17 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             animation: fadeIn 1s ease;
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 20px;
             color: #4CAF50;
         }
         .total-eggs {
-            font-size: 1.8em;
-            margin-bottom: 25px;
+            font-size: 2em;
+            margin-bottom: 30px;
             color: #4CAF50;
             animation: pulse 2s infinite;
         }
@@ -44,7 +41,7 @@
             padding: 25px;
             margin: 20px 0;
             border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
             text-align: left;
             animation: fadeIn 1s ease;
         }
@@ -54,7 +51,7 @@
             display: block;
         }
         input {
-            width: 80%;
+            width: 90%;
             padding: 15px;
             margin: 10px 0;
             font-size: 1.2em;
@@ -93,6 +90,25 @@
         .report-link:hover {
             background: #45a049;
         }
+        .install-banner {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+        .install-banner button {
+            margin-left: 20px;
+            background: white;
+            color: #4CAF50;
+        }
         .links {
             margin-top: 30px;
         }
@@ -106,9 +122,43 @@
             100% { transform: scale(1); }
         }
     </style>
+
+    <script>
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-banner').style.display = 'block';
+        });
+
+        function installApp() {
+            document.getElementById('install-banner').style.display = 'none';
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA install');
+                    } else {
+                        console.log('User dismissed the PWA install');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/service-worker.js')
+                    .then(() => console.log("Service Worker Registered"))
+                    .catch(err => console.log("SW registration failed: ", err));
+            });
+        }
+    </script>
 </head>
 
 <body>
+
     <div class="container">
         <h1>🥚 Egg Tracker</h1>
 
@@ -130,15 +180,6 @@
             <a href="{{ url_for('manage') }}" class="report-link">🛠️ Manage Past Entries</a>
         </div>
     </div>
-    
 </body>
-<link rel="manifest" href="/static/manifest.json">
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/static/service-worker.js')
-            .then(() => console.log("Service Worker Registered"))
-            .catch(err => console.log("SW registration failed: ", err));
-    }
-</script>
 
 </html>

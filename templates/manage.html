@@ -2,61 +2,76 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Past Entries 🛠️</title>
 
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
             color: #333;
-            text-align: center;
-            padding: 20px;
-            max-width: 700px;
-            margin: auto;
+            padding: 15px;
+            margin: 0;
         }
 
         .container {
             background: #ffffff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            margin: auto;
             animation: fadeIn 1s ease;
         }
 
         h1 {
             color: #ef6c00;
+            font-size: 1.8em;
             margin-bottom: 20px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
+            border-collapse: separate;
+            border-spacing: 0 12px;
         }
 
         th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            font-size: 1.1em;
+            text-align: center;
+            font-size: 1em;
         }
 
-        input {
-            width: 80px;
-            padding: 8px;
+        th {
+            font-weight: bold;
+            color: #555;
+            padding-bottom: 8px;
+        }
+
+        td {
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
             font-size: 1em;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             text-align: center;
         }
 
         button {
-            padding: 8px 15px;
-            margin: 0 5px;
+            padding: 10px 15px;
+            margin: 5px 0;
             background: #ef6c00;
             color: white;
             border: none;
             border-radius: 8px;
+            font-size: 1em;
+            width: 48%;
             cursor: pointer;
             transition: background 0.3s ease;
         }
@@ -68,12 +83,12 @@
         a {
             display: inline-block;
             margin-top: 20px;
-            padding: 12px 20px;
+            padding: 12px 25px;
             text-decoration: none;
             font-weight: bold;
             background: #ef6c00;
             color: white;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: background 0.3s ease;
         }
 
@@ -82,15 +97,31 @@
         }
 
         .add-form {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 25px;
             background: #f1f8e9;
+            padding: 20px;
             border-radius: 12px;
+        }
+
+        .add-form h2 {
+            font-size: 1.4em;
+            color: #558b2f;
+            margin-bottom: 15px;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 500px) {
+            button {
+                width: 100%;
+            }
+
+            th, td {
+                font-size: 0.95em;
+            }
         }
     </style>
 </head>
@@ -101,26 +132,30 @@
 
         <form method="POST">
             <table>
-                <tr>
-                    <th>Date</th>
-                    <th>Eggs</th>
-                    <th>Actions</th>
-                </tr>
-                {% for entry in entries %}
-                <tr>
-                    <td>{{ entry.date }}</td>
-                    <td><input type="number" name="count_{{ entry.date }}" value="{{ entry.count }}" min="0" required></td>
-                    <td>
-                        <button type="submit" name="update" value="{{ entry.date }}">💾 Update</button>
-                        <button type="submit" name="delete" value="{{ entry.date }}">🗑️ Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Eggs Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.date }}</td>
+                        <td><input type="number" name="count_{{ entry.date }}" value="{{ entry.count }}" min="0" required></td>
+                        <td>
+                            <button type="submit" name="update" value="{{ entry.date }}">💾 Update</button>
+                            <button type="submit" name="delete" value="{{ entry.date }}">🗑️ Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </form>
 
         <div class="add-form">
-            <h2>Add New Entry</h2>
+            <h2>➕ Add New Entry</h2>
             <form method="POST">
                 <label for="new_date">📅 Date:</label><br>
                 <input type="date" id="new_date" name="new_date" required><br><br>
@@ -135,4 +170,5 @@
         <a href="{{ url_for('index') }}">🏠 Back to Home</a>
     </div>
 </body>
+
 </html>
